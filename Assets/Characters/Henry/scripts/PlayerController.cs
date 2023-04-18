@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
 	Rigidbody2D rb2d;
 	PlayerController playerController;
 	SpriteRenderer spriteRenderer;
+	PolygonCollider2D poly2d;
 	#endregion
 	//	Code for player movement.
 	#region Control
@@ -21,6 +22,7 @@ public class PlayerController : MonoBehaviour
 	bool IsMoving = false;
 	Vector3 position = new Vector2();
 	Vector3 direction = new Vector2();
+	float distToGround;
 	void HandleInput()
 	{	
 		//Horizontal Movement
@@ -33,6 +35,29 @@ public class PlayerController : MonoBehaviour
 	void Jump()
 	{
 		rb2d.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
+	}
+	bool IsGrounded() 
+	{
+		return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
+	}
+	int jumpCount;
+	int jump;
+	void HandleKeyBoardEvents()
+	{
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			//Double jump logic
+			Debug.Log("Jump"+ jump + " " + jumpCount);
+			if (IsGrounded() == true)
+			{
+				Jump();
+			}
+			if (IsGrounded() == false && jump < jumpCount)
+			{
+				Jump();
+				jump++;
+			}
+		}
 	}
 
 	#endregion
@@ -58,13 +83,6 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	void HandleKeyBoardEvents()
-	{
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			Jump();
-		}
-	}
 	#endregion
 	//	Region for default Unity code
 	#region Unity
@@ -74,6 +92,9 @@ public class PlayerController : MonoBehaviour
         rb2d = this.GetComponent<Rigidbody2D>();
 		playerController = this.GetComponent<PlayerController>();
 		spriteRenderer = this.GetComponent<SpriteRenderer>();
+		poly2d = this.GetComponent<PolygonCollider2D>();
+		distToGround = poly2d.bounds.extents.y;
+		jumpCount = 2;
     }
 
     // Update is called once per frame
@@ -81,6 +102,10 @@ public class PlayerController : MonoBehaviour
     {
         HandleInput();
 		HandleKeyBoardEvents();
+		if (IsGrounded() == true)
+		{
+			jump = 0;
+		}
     }
 	#endregion
 }
