@@ -19,23 +19,20 @@ public class PlayerController : MonoBehaviour
 
 	// Private motion variables
 	bool IsMoving = false;
-	Vector2 position = new Vector2();
+	Vector3 position = new Vector2();
+	Vector3 direction = new Vector2();
 	void HandleInput()
-	{
-		Vector3 direction = new Vector3(0, 0, 0);
-		
+	{	
+		//Horizontal Movement
+		//To-do smoothing - simulate inertia
 		direction.x = Input.GetAxis("Horizontal");
-		direction = Vector3.Lerp(direction, direction, 0.5f);
-		Vector3 position = new Vector3(direction.x, 0, 0);
-		playerController.position.x = Input.GetAxis("Horizontal");
-		position = Vector3.Lerp(direction, position, 0.5f);
+		position = Vector3.Lerp(direction, new Vector3(direction.x, direction.y, direction.z), 5);
 		transform.position += (position * 5) * Time.deltaTime;
 		HandleAnimation(position);
-		//position.x = Input.GetAxisRaw("Horizontal");
 	}
-	void Jump(float elapsed)
+	void Jump()
 	{
-		rb2d.AddForce(new Vector2(transform.position.x, position.y+5));
+		rb2d.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
 	}
 
 	#endregion
@@ -65,7 +62,7 @@ public class PlayerController : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
-			Jump(Time.deltaTime);
+			Jump();
 		}
 	}
 	#endregion
@@ -83,6 +80,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HandleInput();
+		HandleKeyBoardEvents();
     }
 	#endregion
 }
