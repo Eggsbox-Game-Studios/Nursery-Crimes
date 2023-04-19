@@ -10,16 +10,26 @@ public class CameraBehaviour : MonoBehaviour
 
 	#region ObjectComponents
 	[SerializeField] private float followSpeed = 2f;
+	Camera cam;
+
+	#endregion
+
+	#region CameraControls
 
 
+
+	public void SetZoom(float distance)
+	{
+		cam.orthographicSize = distance;
+	}
 	#endregion
 
 	#region Unity
 	// Start is called before the first frame update
 	void Start()
     {
-        
-    }
+        cam = this.GetComponent<Camera>();
+	}
 
     // Update is called once per frame
     void Update()

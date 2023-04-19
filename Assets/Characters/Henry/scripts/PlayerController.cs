@@ -6,7 +6,8 @@ public class PlayerController : MonoBehaviour
 {
 	// Code responsible for handling external objects/classes.
 	#region ExternalLinks
-	
+	GameManager gameManager;
+
 	#endregion
 	//	Code for storing gameobject components of the player character.
 	#region ObjectComponents
@@ -113,6 +114,11 @@ public class PlayerController : MonoBehaviour
 
 	#endregion
 	//Region for Misc Events/Checks
+	#region CameraControl
+	private bool isZoomed = false;
+	private float defaultZoom = 5f;
+
+	#endregion
 	#region Events
 	/// <summary>
 	/// Fires everytime Update() is fired, handles misc events that are essential for correct behaviour of playercontroller.
@@ -124,6 +130,11 @@ public class PlayerController : MonoBehaviour
 		{
 			jump = 0;
 			rb2d.drag = defaultDrag;
+		}
+		//Reset Camera if not default zoom
+		if (isZoomed == false)
+		{
+			gameManager.LevelCamera.SetZoom(Mathf.Lerp(Camera.main.orthographicSize, defaultZoom, 0.5f * Time.deltaTime));
 		}
 	}
 	#endregion
@@ -139,14 +150,44 @@ public class PlayerController : MonoBehaviour
 		collider2d = this.GetComponent<BoxCollider2D>();
 		distToGround = collider2d.bounds.extents.y;
 		defaultDrag = rb2d.drag;
-    }
+		gameManager = this.GetComponent<GameManager>();
+		GameObject _manager = GameObject.FindGameObjectWithTag("GameManager");
+		gameManager = _manager.GetComponent<GameManager>();
+	}
 
     // Update is called once per frame
+
     void Update()
     {
         HandleInput();
 		HandleKeyBoardEvents();
 		HandleEvents();
     }
+	private void OnTriggerStay2D(Collider2D other)
+	{
+		if (other.gameObject.tag == "Zoom" && isZoomed == false)
+		{
+			GameObject _gobject = other.gameObject;
+			CameraZoomBehaviour cameraZoomBehaviour = _gobject.GetComponent<CameraZoomBehaviour>();
+			if (Camera.main.orthographicSize >= cameraZoomBehaviour.zoomAmount)
+			{
+				isZoomed = true;
+			}
+			if (Camera.main.orthographicSize != cameraZoomBehaviour.zoomAmount)
+			{
+				gameManager.LevelCamera.SetZoom(Mathf.Lerp(Camera.main.orthographicSize, cameraZoomBehaviour.zoomAmount, cameraZoomBehaviour.duration * Time.deltaTime));
+				
+			}
+		}
+	}
+
+	private void OnTriggerExit2D(Collider2D collision)
+	{
+		if (collision.gameObject.tag == "Zoom")
+		{
+			Debug.Log("Stop Zoom");
+			isZoomed = false;
+		}
+	}
 	#endregion
 }
