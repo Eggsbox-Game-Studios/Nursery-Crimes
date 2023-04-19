@@ -6,14 +6,16 @@ public class PlayerController : MonoBehaviour
 {
 	// Code responsible for handling external objects/classes.
 	#region ExternalLinks
-
+	
 	#endregion
 	//	Code for storing gameobject components of the player character.
 	#region ObjectComponents
 	Rigidbody2D rb2d;
 	PlayerController playerController;
 	SpriteRenderer spriteRenderer;
-	PolygonCollider2D poly2d;
+	BoxCollider2D collider2d;
+	[SerializeField]
+	private LayerMask jumpableGround;
 	#endregion
 	//	Code for player movement.
 	#region Control
@@ -23,40 +25,48 @@ public class PlayerController : MonoBehaviour
 	Vector3 position = new Vector2();
 	Vector3 direction = new Vector2();
 	float distToGround;
+	int jumpHeight = 7;
+	int jumpCount = 2;
+	int jump = 0;
+	float moveSpeed = 10f;
 	void HandleInput()
 	{	
 		//Horizontal Movement
 		//To-do smoothing - simulate inertia
 		direction.x = Input.GetAxis("Horizontal");
-		position = Vector3.Lerp(direction, new Vector3(direction.x, direction.y, direction.z), 5);
-		transform.position += (position * 5) * Time.deltaTime;
-		HandleAnimation(position);
+		rb2d.velocity = new Vector2(direction.x * moveSpeed, rb2d.velocity.y);
+		HandleAnimation(direction);
 	}
 	void Jump()
 	{
-		rb2d.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
+		//Double jump logic
+		Debug.Log("Jump" + jump + " isGrounded" + IsGrounded());
+		if (IsGrounded() == true)
+		{
+			Debug.Log("First Jump" + jump + " " + jumpCount);
+			rb2d.AddForce(Vector2.up * jumpHeight, ForceMode2D.Impulse);
+			jump++;
+		}
+		else
+		{
+			if (jump < jumpCount)
+			{
+				Debug.Log("Jump" + jump + " " + jumpCount);
+				rb2d.AddForce(Vector2.up * (jumpHeight * 0.5f), ForceMode2D.Impulse);
+				jump++;
+			}
+		}
 	}
 	bool IsGrounded() 
 	{
-		return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
+		return Physics2D.BoxCast(collider2d.bounds.center, collider2d.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
 	}
-	int jumpCount;
-	int jump;
+
 	void HandleKeyBoardEvents()
 	{
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
-			//Double jump logic
-			Debug.Log("Jump"+ jump + " " + jumpCount);
-			if (IsGrounded() == true)
-			{
-				Jump();
-			}
-			if (IsGrounded() == false && jump < jumpCount)
-			{
-				Jump();
-				jump++;
-			}
+			Jump();
 		}
 	}
 
@@ -92,9 +102,8 @@ public class PlayerController : MonoBehaviour
         rb2d = this.GetComponent<Rigidbody2D>();
 		playerController = this.GetComponent<PlayerController>();
 		spriteRenderer = this.GetComponent<SpriteRenderer>();
-		poly2d = this.GetComponent<PolygonCollider2D>();
-		distToGround = poly2d.bounds.extents.y;
-		jumpCount = 2;
+		collider2d = this.GetComponent<BoxCollider2D>();
+		distToGround = collider2d.bounds.extents.y;
     }
 
     // Update is called once per frame

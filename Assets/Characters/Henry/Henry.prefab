@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 2599874925574058765}
   - component: {fileID: -7433298975553321028}
   - component: {fileID: 5653575598021508054}
-  - component: {fileID: 4147239518163599528}
+  - component: {fileID: -2216175915974693868}
+  - component: {fileID: 852699839745469947}
   m_Layer: 0
   m_Name: Henry
   m_TagString: Untagged
@@ -98,8 +99,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8952119e7e9d744b84757b87ab12cde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!60 &4147239518163599528
-PolygonCollider2D:
+--- !u!50 &-2216175915974693868
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6122051722563711479}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!61 &852699839745469947
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -121,27 +143,6 @@ PolygonCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0.35999998, y: 0.22}
-      - {x: 0.25, y: 0.28}
-      - {x: 0.17999999, y: 0.25}
-      - {x: 0.01, y: 0.14999999}
-      - {x: -0.14, y: 0.38}
-      - {x: -0.19999999, y: 0.5}
-      - {x: -0.32, y: 0.5}
-      - {x: -0.34, y: 0.45999998}
-      - {x: -0.35999998, y: 0.35}
-      - {x: -0.35999998, y: 0.22999999}
-      - {x: -0.28, y: 0.19}
-      - {x: -0.29999998, y: 0.049999997}
-      - {x: -0.22999999, y: -0.12}
-      - {x: -0.11, y: -0.22}
-      - {x: 0.01, y: -0.31}
-      - {x: -0.049999997, y: -0.42999998}
-      - {x: -0.03, y: -0.5}
-      - {x: 0.049999997, y: -0.5}
-      - {x: 0.11, y: -0.48}
-      - {x: 0.17, y: -0.26}
-      - {x: 0.31, y: -0.14}
-      - {x: 0.35999998, y: 0.049999997}
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
