@@ -132,7 +132,7 @@ public class PlayerController : MonoBehaviour
 			rb2d.drag = defaultDrag;
 		}
 		//Reset Camera if not default zoom
-		if (isZoomed == false)
+		if (isZoomed == false && zooming != true)
 		{
 			gameManager.LevelCamera.SetZoom(Mathf.Lerp(Camera.main.orthographicSize, defaultZoom, 0.5f * Time.deltaTime));
 		}
@@ -163,6 +163,7 @@ public class PlayerController : MonoBehaviour
 		HandleKeyBoardEvents();
 		HandleEvents();
     }
+	private bool zooming = false;
 	private void OnTriggerStay2D(Collider2D other)
 	{
 		if (other.gameObject.tag == "Zoom" && isZoomed == false)
@@ -172,9 +173,11 @@ public class PlayerController : MonoBehaviour
 			if (Camera.main.orthographicSize >= cameraZoomBehaviour.zoomAmount)
 			{
 				isZoomed = true;
+
 			}
 			if (Camera.main.orthographicSize != cameraZoomBehaviour.zoomAmount)
 			{
+				zooming = true;
 				gameManager.LevelCamera.SetZoom(Mathf.Lerp(Camera.main.orthographicSize, cameraZoomBehaviour.zoomAmount, cameraZoomBehaviour.duration * Time.deltaTime));
 				
 			}
@@ -187,6 +190,7 @@ public class PlayerController : MonoBehaviour
 		{
 			Debug.Log("Stop Zoom");
 			isZoomed = false;
+			zooming = false;
 		}
 	}
 	#endregion
