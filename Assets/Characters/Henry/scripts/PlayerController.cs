@@ -168,6 +168,7 @@ public class PlayerController : MonoBehaviour
 	{
 		if (other.gameObject.tag == "Zoom" && isZoomed == false)
 		{
+			Debug.Log("Zoom Trigger");
 			GameObject _gobject = other.gameObject;
 			CameraZoomBehaviour cameraZoomBehaviour = _gobject.GetComponent<CameraZoomBehaviour>();
 			if (Camera.main.orthographicSize >= cameraZoomBehaviour.zoomAmount)

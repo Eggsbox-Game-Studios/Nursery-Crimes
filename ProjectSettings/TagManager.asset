@@ -6,6 +6,8 @@ TagManager:
   tags:
   - GameManager
   - Zoom
+  - ZoomOut
+  - AudioManager
   layers:
   - Default
   - TransparentFX
@@ -14,15 +16,15 @@ TagManager:
   - Water
   - UI
   - Ground
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - SkyOverlay
+  - SkyObjects
+  - Sky
+  - Background
+  - BackgroundObjects
+  - MidGround
+  - MidGroundObjects
+  - Foreground
+  - ForegroundObjects
   - 
   - 
   - 
@@ -42,4 +44,31 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: SkyOverlay
+    uniqueID: 18085825
+    locked: 0
+  - name: SkyObjects
+    uniqueID: 3748618797
+    locked: 0
+  - name: Sky
+    uniqueID: 2200833099
+    locked: 0
+  - name: Background
+    uniqueID: 857701925
+    locked: 0
+  - name: BackgroundObjects
+    uniqueID: 1356638651
+    locked: 0
+  - name: MidGround
+    uniqueID: 3885779197
+    locked: 0
+  - name: MidGroundObjects
+    uniqueID: 3336684227
+    locked: 0
+  - name: Foreground
+    uniqueID: 243790275
+    locked: 0
+  - name: ForegroundObjects
+    uniqueID: 2168703529
     locked: 0
