@@ -34,13 +34,18 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] float jumpHeight = 5;
 	[SerializeField] float jumpBoost = 0.5f;
 	float defaultDrag;
-	void HandleInput()
-	{	
-		//Horizontal Movement
-		//To-do smoothing - simulate inertia
-		direction.x = Input.GetAxis("Horizontal");
-		rb2d.velocity = new Vector2(direction.x * moveSpeed, rb2d.velocity.y);
-		HandleAnimation(direction);
+	void HandleMovement()
+	{
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			Jump();
+		}
+		else
+		{
+			direction.x = Input.GetAxis("Horizontal");
+			
+			HandleAnimation(direction);
+		}
 	}
 	/// <summary>
 	/// Code responsible for Jump mechanic.
@@ -79,21 +84,7 @@ public class PlayerController : MonoBehaviour
 	{
 		return Physics2D.BoxCast(collider2d.bounds.center, collider2d.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
 	}
-	private float oldTime;
-	private float currentTime;
-	void HandleKeyBoardEvents()
-	{
-		currentTime = Time.deltaTime;
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			Jump();
-		}
-		if (Input.GetKey(KeyCode.Space) && currentTime - oldTime > 0.25f)
-		{
-			Glide();
-		}
-		oldTime = Time.deltaTime;
-	}
+
 
 	#endregion
 	//	Region for animation code.
@@ -110,18 +101,39 @@ public class PlayerController : MonoBehaviour
 			{
 				spriteRenderer.flipX = true;
 			}
-			animator.SetBool("isMoving", true);
+			animator.SetFloat("Speed", 1);
 		}
-		animator.SetBool("isMoving", false);
+		else
+		{
+			animator.SetFloat("Speed", 0);
+		}
 		//To-do animation state transitions
 	}
 
 	#endregion
 	//Region for Misc Events/Checks
 	#region CameraControl
+
 	private bool isZoomed = false;
 	private float defaultZoom = 5f;
+	private bool zooming = false;
 
+	void CameraZoom(GameObject gobject)
+	{
+		Debug.Log("Zoom Trigger");
+		CameraZoomBehaviour cameraZoomBehaviour = gobject.GetComponent<CameraZoomBehaviour>();
+		if (Camera.main.orthographicSize >= cameraZoomBehaviour.zoomAmount)
+		{
+			isZoomed = true;
+
+		}
+		if (Camera.main.orthographicSize != cameraZoomBehaviour.zoomAmount)
+		{
+			zooming = true;
+			gameManager.LevelCamera.SetZoom(Mathf.Lerp(Camera.main.orthographicSize, cameraZoomBehaviour.zoomAmount, cameraZoomBehaviour.duration * Time.deltaTime));
+
+		}
+	}
 	#endregion
 	#region Events
 	/// <summary>
@@ -164,29 +176,18 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        HandleInput();
-		HandleKeyBoardEvents();
+        HandleMovement();
 		HandleEvents();
     }
-	private bool zooming = false;
+	private void FixedUpdate()
+	{
+		rb2d.velocity = new Vector2(direction.x * moveSpeed, rb2d.velocity.y);
+	}
 	private void OnTriggerStay2D(Collider2D other)
 	{
 		if (other.gameObject.tag == "Zoom" && isZoomed == false)
 		{
-			Debug.Log("Zoom Trigger");
-			GameObject _gobject = other.gameObject;
-			CameraZoomBehaviour cameraZoomBehaviour = _gobject.GetComponent<CameraZoomBehaviour>();
-			if (Camera.main.orthographicSize >= cameraZoomBehaviour.zoomAmount)
-			{
-				isZoomed = true;
-
-			}
-			if (Camera.main.orthographicSize != cameraZoomBehaviour.zoomAmount)
-			{
-				zooming = true;
-				gameManager.LevelCamera.SetZoom(Mathf.Lerp(Camera.main.orthographicSize, cameraZoomBehaviour.zoomAmount, cameraZoomBehaviour.duration * Time.deltaTime));
-				
-			}
+			CameraZoom(other.gameObject);
 		}
 	}
 
