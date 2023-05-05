@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
 	BoxCollider2D collider2d;
 	[SerializeField]
 	private LayerMask jumpableGround;
+	Animator animator;
 	#endregion
 	//	Code for player movement.
 	#region Control
@@ -109,7 +110,10 @@ public class PlayerController : MonoBehaviour
 			{
 				spriteRenderer.flipX = true;
 			}
+			animator.SetBool("isMoving", true);
 		}
+		animator.SetBool("isMoving", false);
+		//To-do animation state transitions
 	}
 
 	#endregion
@@ -148,6 +152,7 @@ public class PlayerController : MonoBehaviour
 		playerController = this.GetComponent<PlayerController>();
 		spriteRenderer = this.GetComponent<SpriteRenderer>();
 		collider2d = this.GetComponent<BoxCollider2D>();
+		animator = this.GetComponent<Animator>();
 		distToGround = collider2d.bounds.extents.y;
 		defaultDrag = rb2d.drag;
 		gameManager = this.GetComponent<GameManager>();
