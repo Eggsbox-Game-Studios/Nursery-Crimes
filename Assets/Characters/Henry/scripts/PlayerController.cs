@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Need to tidy this up 
+
 public class PlayerController : MonoBehaviour
 {
 	// Code responsible for handling external objects/classes.
@@ -10,30 +12,36 @@ public class PlayerController : MonoBehaviour
 
 	#endregion
 	//	Code for storing gameobject components of the player character.
-	#region ObjectComponents
+	#region Attributes
+
 	Rigidbody2D rb2d;
 	PlayerController playerController;
 	SpriteRenderer spriteRenderer;
 	BoxCollider2D collider2d;
-	[SerializeField]
-	private LayerMask jumpableGround;
 	Animator animator;
-	#endregion
-	//	Code for player movement.
-	#region Control
 
-	// Private motion variables
-	private Vector3 position = new Vector2();
-	private Vector3 direction = new Vector2();
-	private float distToGround;
-	
-	private int jump = 0;
 	//Editor Changeable Variables
 	[SerializeField] int jumpCount = 2;
 	[SerializeField] float moveSpeed = 10f;
 	[SerializeField] float jumpHeight = 5;
 	[SerializeField] float jumpBoost = 0.5f;
+	[SerializeField] private LayerMask jumpableGround;
+
+	//Movement Variables
+	private Vector3 position = new Vector2();
+	private Vector3 direction = new Vector2();
+	private float distToGround;
+	private int jump = 0;
 	float defaultDrag;
+
+	//Camera Control Variables
+	private bool isZoomed = false;
+	private float defaultZoom = 5f;
+	#endregion
+
+	//	Code for player movement methods.
+	#region Control
+
 	void HandleMovement()
 	{
 		if (Input.GetKeyDown(KeyCode.Space))
@@ -47,6 +55,7 @@ public class PlayerController : MonoBehaviour
 			HandleAnimation(direction);
 		}
 	}
+
 	/// <summary>
 	/// Code responsible for Jump mechanic.
 	/// </summary>
@@ -71,22 +80,23 @@ public class PlayerController : MonoBehaviour
 			}
 		}
 	}
+
 	void Glide()
 	{
 		Debug.Log("Glide");
 		rb2d.drag = 10f;
 	}
+
 	/// <summary>
 	/// Bool to check if player is grounded.
 	/// </summary>
 	/// <returns><b>True</b> if box collider overlaps with 'ground' layer. <b>False</b> if no collision for boxcast is detected.</returns>
 	bool IsGrounded() 
 	{
-		return Physics2D.BoxCast(collider2d.bounds.center, collider2d.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
+		return Physics2D.BoxCast(collider2d.bounds.center, collider2d.bounds.size, 0f, Vector2.down, 0.1f, jumpableGround);
 	}
-
-
 	#endregion
+
 	//	Region for animation code.
 	#region Animation
 	void HandleAnimation(Vector3 direction)
@@ -111,12 +121,9 @@ public class PlayerController : MonoBehaviour
 	}
 
 	#endregion
-	//Region for Misc Events/Checks
-	#region CameraControl
 
-	private bool isZoomed = false;
-	private float defaultZoom = 5f;
-	private bool zooming = false;
+	//Region for Camera Controls
+	#region CameraControl
 
 	void CameraZoom(GameObject gobject)
 	{
@@ -129,32 +136,36 @@ public class PlayerController : MonoBehaviour
 		}
 		if (Camera.main.orthographicSize != cameraZoomBehaviour.zoomAmount)
 		{
-			zooming = true;
 			gameManager.LevelCamera.SetZoom(Mathf.Lerp(Camera.main.orthographicSize, cameraZoomBehaviour.zoomAmount, cameraZoomBehaviour.duration * Time.deltaTime));
 
 		}
 	}
 	#endregion
+
 	#region Events
+
 	/// <summary>
 	/// Fires everytime Update() is fired, handles misc events that are essential for correct behaviour of playercontroller.
 	/// </summary>
 	void HandleEvents()
 	{
+		Debug.Log(IsGrounded());
 		//Fires when player is on a ground layer.
 		if (IsGrounded() == true)
 		{
+			Debug.Log("Landed" + jump);
 			jump = 0;
 			rb2d.drag = defaultDrag;
 		}
 		//Reset Camera if not default zoom
-		if (isZoomed == false && zooming != true)
+		if (isZoomed == false)
 		{
 			gameManager.LevelCamera.SetZoom(Mathf.Lerp(Camera.main.orthographicSize, defaultZoom, 0.5f * Time.deltaTime));
 		}
 	}
 	#endregion
-	//	Region for default Unity code
+
+
 	#region Unity
 	// Start is called before the first frame update
 	void Start()
@@ -163,7 +174,7 @@ public class PlayerController : MonoBehaviour
         rb2d = this.GetComponent<Rigidbody2D>();
 		playerController = this.GetComponent<PlayerController>();
 		spriteRenderer = this.GetComponent<SpriteRenderer>();
-		collider2d = this.GetComponent<BoxCollider2D>();
+		collider2d = GetComponent<BoxCollider2D>();
 		animator = this.GetComponent<Animator>();
 		distToGround = collider2d.bounds.extents.y;
 		defaultDrag = rb2d.drag;
@@ -197,7 +208,6 @@ public class PlayerController : MonoBehaviour
 		{
 			Debug.Log("Stop Zoom");
 			isZoomed = false;
-			zooming = false;
 		}
 	}
 	#endregion
