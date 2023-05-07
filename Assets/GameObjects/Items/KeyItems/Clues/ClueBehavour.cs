@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class ClueBehavour : MonoBehaviour
 {
+    #region Attributes
+    [SerializeField] public int clueValue = 1;
+	Collider2D collider2d;
+	#endregion
 
-    // Start is called before the first frame update
-    void Start()
+	#region Unity
+	// Start is called before the first frame update
+	void Start()
     {
-        
+		collider2d = GetComponent<Collider2D>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	#endregion
 }

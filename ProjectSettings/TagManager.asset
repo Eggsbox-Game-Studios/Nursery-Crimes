@@ -8,6 +8,9 @@ TagManager:
   - Zoom
   - ZoomOut
   - AudioManager
+  - HealthUI
+  - CluesUI
+  - Clue
   layers:
   - Default
   - TransparentFX

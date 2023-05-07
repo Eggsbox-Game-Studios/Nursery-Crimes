@@ -6,17 +6,18 @@ public class GameManager : MonoBehaviour
 {
     // Start is called before the first frame update
     public CameraBehaviour LevelCamera;
-    [SerializeField] PlayerController player;
+    PlayerController player;
+    public UIManager uiManager;
     void Start()
     {
-        Debug.Log("Game Loaded");
+        //Get Variable Components
+        uiManager = GameObject.FindObjectOfType<UIManager>().GetComponent<UIManager>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+
+
         GameObject _camera = GameObject.FindGameObjectWithTag("MainCamera");
         LevelCamera = _camera.GetComponent<CameraBehaviour>();
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Debug.Log("Game Loaded");
     }
 }

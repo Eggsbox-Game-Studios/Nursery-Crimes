@@ -35,7 +35,6 @@ public class PlayerController : MonoBehaviour
 	private int jump = 0;
 	private bool isJumping = false;
 	private Vector3 jumpVector = new Vector2();
-	private bool isFalling = false;
 	float defaultDrag;
 
 	//Camera Control Variables
@@ -63,8 +62,6 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
 	void Jump()
 	{
-		//Double jump logic
-		Debug.Log("Jump" + jump + " isGrounded" + IsGrounded());
 		//For the first jump, we want to apply a static upwards force on our vector's Y axis. Then for subsequent jumps, a static 'boost' value.
 		if (IsGrounded() == true)
 		{
@@ -82,7 +79,6 @@ public class PlayerController : MonoBehaviour
 				jump++;
 			}
 		}
-		Debug.Log("Jump" + jump + " " + jumpCount);
 	}
 	IEnumerator JumpRoutine()
 	{
@@ -93,6 +89,7 @@ public class PlayerController : MonoBehaviour
 		animator.SetBool("isFalling", true);
 
 		yield return new WaitUntil(() => IsGrounded() == true);
+		//Jank
 		animator.SetBool("isFalling", false);
 		animator.SetBool("isJumping", false);
 	}
@@ -165,13 +162,11 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
 	void HandleEvents()
 	{
-		Debug.Log(IsGrounded());
 		//Fires when player is on a ground layer.
 		if (IsGrounded() == true)
 		{
 			jump = 0;
 			isJumping = false;
-			isFalling = false;
 			rb2d.drag = defaultDrag;
 		}
 		//Reset Camera if not default zoom
@@ -215,6 +210,15 @@ public class PlayerController : MonoBehaviour
 		if (isJumping && jump > 0 && jump < jumpCount)
 		{
 			rb2d.AddForce(jumpVector, ForceMode2D.Impulse);
+		}
+	}
+
+	private void OnTriggerEnter2D(Collider2D other)
+	{
+		if (other.gameObject.tag == "Clue")
+		{
+			gameManager.uiManager.uiKit.uiClues.FindClue(1);
+			Destroy(other.gameObject);
 		}
 	}
 	private void OnTriggerStay2D(Collider2D other)
