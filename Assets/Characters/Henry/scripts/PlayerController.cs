@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] float moveSpeed = 10f;
 	[SerializeField] float jumpHeight = 5;
 	[SerializeField] float jumpBoost = 0.5f;
+	[SerializeField] float movementDelay = 0.25f;
 	[SerializeField] private LayerMask jumpableGround;
 
 	//Movement Variables
@@ -32,6 +33,9 @@ public class PlayerController : MonoBehaviour
 	private Vector3 direction = new Vector2();
 	private float distToGround;
 	private int jump = 0;
+	private bool isJumping = false;
+	private Vector3 jumpVector = new Vector2();
+	private bool isFalling = false;
 	float defaultDrag;
 
 	//Camera Control Variables
@@ -51,8 +55,6 @@ public class PlayerController : MonoBehaviour
 		else
 		{
 			direction.x = Input.GetAxis("Horizontal");
-			
-			HandleAnimation(direction);
 		}
 	}
 
@@ -66,19 +68,33 @@ public class PlayerController : MonoBehaviour
 		//For the first jump, we want to apply a static upwards force on our vector's Y axis. Then for subsequent jumps, a static 'boost' value.
 		if (IsGrounded() == true)
 		{
-			Debug.Log("First Jump" + jump + " " + jumpCount);
-			rb2d.AddForce(Vector2.up * jumpHeight, ForceMode2D.Impulse);
+			isJumping = true;
+			animator.SetBool("isJumping", true);
+			StartCoroutine(JumpRoutine());
 			jump++;
 		}
 		else
 		{
 			if (jump < jumpCount)
 			{
-				Debug.Log("Jump" + jump + " " + jumpCount);
+				isJumping = true;
 				rb2d.AddForce(Vector2.up * (jumpHeight + jumpBoost), ForceMode2D.Impulse);
 				jump++;
 			}
 		}
+		Debug.Log("Jump" + jump + " " + jumpCount);
+	}
+	IEnumerator JumpRoutine()
+	{
+		yield return new WaitForSeconds(movementDelay);
+		rb2d.AddForce(Vector2.up * jumpHeight, ForceMode2D.Impulse);
+		
+		yield return new WaitForSeconds(0.15f);
+		animator.SetBool("isFalling", true);
+
+		yield return new WaitUntil(() => IsGrounded() == true);
+		animator.SetBool("isFalling", false);
+		animator.SetBool("isJumping", false);
 	}
 
 	void Glide()
@@ -101,6 +117,7 @@ public class PlayerController : MonoBehaviour
 	#region Animation
 	void HandleAnimation(Vector3 direction)
 	{
+		//Running Anim
 		if (direction.x != 0 || direction.y != 0)
 		{
 			if (direction.x < 0)
@@ -117,7 +134,6 @@ public class PlayerController : MonoBehaviour
 		{
 			animator.SetFloat("Speed", 0);
 		}
-		//To-do animation state transitions
 	}
 
 	#endregion
@@ -153,8 +169,9 @@ public class PlayerController : MonoBehaviour
 		//Fires when player is on a ground layer.
 		if (IsGrounded() == true)
 		{
-			Debug.Log("Landed" + jump);
 			jump = 0;
+			isJumping = false;
+			isFalling = false;
 			rb2d.drag = defaultDrag;
 		}
 		//Reset Camera if not default zoom
@@ -189,10 +206,16 @@ public class PlayerController : MonoBehaviour
     {
         HandleMovement();
 		HandleEvents();
+		HandleAnimation(direction);
     }
 	private void FixedUpdate()
 	{
 		rb2d.velocity = new Vector2(direction.x * moveSpeed, rb2d.velocity.y);
+
+		if (isJumping && jump > 0 && jump < jumpCount)
+		{
+			rb2d.AddForce(jumpVector, ForceMode2D.Impulse);
+		}
 	}
 	private void OnTriggerStay2D(Collider2D other)
 	{
@@ -206,7 +229,6 @@ public class PlayerController : MonoBehaviour
 	{
 		if (collision.gameObject.tag == "Zoom")
 		{
-			Debug.Log("Stop Zoom");
 			isZoomed = false;
 		}
 	}
