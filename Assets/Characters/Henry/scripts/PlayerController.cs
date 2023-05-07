@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] float jumpHeight = 5;
 	[SerializeField] float jumpBoost = 0.5f;
 	[SerializeField] float movementDelay = 0.25f;
-	[SerializeField] private LayerMask jumpableGround;
+	[SerializeField] private List<LayerMask> jumpableGround;
 
 	//Movement Variables
 	private Vector3 position = new Vector2();
@@ -106,7 +106,14 @@ public class PlayerController : MonoBehaviour
 	/// <returns><b>True</b> if box collider overlaps with 'ground' layer. <b>False</b> if no collision for boxcast is detected.</returns>
 	bool IsGrounded() 
 	{
-		return Physics2D.BoxCast(collider2d.bounds.center, collider2d.bounds.size, 0f, Vector2.down, 0.1f, jumpableGround);
+		for (int i = 0; i < jumpableGround.Count; i++)
+		{
+			if (Physics2D.BoxCast(collider2d.bounds.center, collider2d.bounds.size, 0f, Vector2.down, 0.1f, jumpableGround[i]) == true)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	#endregion
 
@@ -135,12 +142,11 @@ public class PlayerController : MonoBehaviour
 
 	#endregion
 
-	//Region for Camera Controls
+	//Region for Camera Controlss
 	#region CameraControl
 
 	void CameraZoom(GameObject gobject)
 	{
-		Debug.Log("Zoom Trigger");
 		CameraZoomBehaviour cameraZoomBehaviour = gobject.GetComponent<CameraZoomBehaviour>();
 		if (Camera.main.orthographicSize >= cameraZoomBehaviour.zoomAmount)
 		{

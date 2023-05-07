@@ -11,11 +11,12 @@ TagManager:
   - HealthUI
   - CluesUI
   - Clue
+  - Crate
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Crate
   - Water
   - UI
   - Ground
