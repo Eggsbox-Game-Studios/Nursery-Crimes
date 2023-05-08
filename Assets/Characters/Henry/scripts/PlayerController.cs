@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour
 	private Vector3 jumpVector = new Vector2();
 	float defaultDrag;
 
+	//Particles
+	ParticleSystem dustParticles;
 
 	#endregion
 
@@ -82,8 +84,9 @@ public class PlayerController : MonoBehaviour
 	IEnumerator JumpRoutine()
 	{
 		yield return new WaitForSeconds(movementDelay);
+		CreateDust();
 		rb2d.AddForce(Vector2.up * jumpHeight, ForceMode2D.Impulse);
-		
+		animator.SetFloat("JumpStage", Time.deltaTime * 0.5f);
 		yield return new WaitUntil(() => IsGrounded() == false);
 		animator.SetBool("isFalling", true);
 
@@ -151,10 +154,20 @@ public class PlayerController : MonoBehaviour
 		//Fires when player is on a ground layer.
 		if (IsGrounded() == true)
 		{
+			
+			if (isJumping)
+			{
+				CreateDust();
+			}
 			jump = 0;
 			isJumping = false;
 			rb2d.drag = defaultDrag;
 		}
+	}
+
+	void CreateDust()
+	{
+		dustParticles.Play();
 	}
 	#endregion
 
@@ -174,6 +187,9 @@ public class PlayerController : MonoBehaviour
 		gameManager = this.GetComponent<GameManager>();
 		GameObject _manager = GameObject.FindGameObjectWithTag("GameManager");
 		gameManager = _manager.GetComponent<GameManager>();
+
+		//Particles
+		dustParticles = GameObject.Find("PlayerDustParticles").GetComponent<ParticleSystem>();
 	}
 
     // Update is called once per frame
