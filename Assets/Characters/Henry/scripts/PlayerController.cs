@@ -39,6 +39,8 @@ public class PlayerController : MonoBehaviour
 
 	//Particles
 	ParticleSystem dustParticles;
+	[SerializeField] GameObject clueParticlesObject;
+	ParticleSystem clueParticles;
 
 	#endregion
 
@@ -84,7 +86,7 @@ public class PlayerController : MonoBehaviour
 	IEnumerator JumpRoutine()
 	{
 		yield return new WaitForSeconds(movementDelay);
-		CreateDust();
+		PlayParticles(dustParticles);
 		rb2d.AddForce(Vector2.up * jumpHeight, ForceMode2D.Impulse);
 		animator.SetFloat("JumpStage", Time.deltaTime * 0.5f);
 		yield return new WaitUntil(() => IsGrounded() == false);
@@ -157,7 +159,7 @@ public class PlayerController : MonoBehaviour
 			
 			if (isJumping)
 			{
-				CreateDust();
+				PlayParticles(dustParticles);
 			}
 			jump = 0;
 			isJumping = false;
@@ -165,9 +167,9 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	void CreateDust()
+	void PlayParticles(ParticleSystem particles)
 	{
-		dustParticles.Play();
+		particles.Play();
 	}
 	#endregion
 
@@ -190,6 +192,7 @@ public class PlayerController : MonoBehaviour
 
 		//Particles
 		dustParticles = GameObject.Find("PlayerDustParticles").GetComponent<ParticleSystem>();
+		clueParticles = clueParticlesObject.GetComponent<ParticleSystem>();
 	}
 
     // Update is called once per frame
@@ -215,6 +218,7 @@ public class PlayerController : MonoBehaviour
 		if (other.gameObject.tag == "Clue")
 		{
 			gameManager.uiManager.uiKit.uiClues.FindClue(1);
+			PlayParticles(clueParticles);
 			Destroy(other.gameObject);
 		}
 	}
