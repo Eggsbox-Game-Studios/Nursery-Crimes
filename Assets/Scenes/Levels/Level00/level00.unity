@@ -4823,6 +4823,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 752624082}
     m_Modifications:
+    - target: {fileID: 3780610372206515447, guid: 24aacec9415a2f34999b4116a0fbb01e, type: 3}
+      propertyPath: Priority
+      value: 140
+      objectReference: {fileID: 0}
+    - target: {fileID: 5514835846371151016, guid: 24aacec9415a2f34999b4116a0fbb01e, type: 3}
+      propertyPath: sfxVolume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5514835846371151016, guid: 24aacec9415a2f34999b4116a0fbb01e, type: 3}
+      propertyPath: musicVolume
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5514835846371151016, guid: 24aacec9415a2f34999b4116a0fbb01e, type: 3}
+      propertyPath: ambienceVolume
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 5514835846371151016, guid: 24aacec9415a2f34999b4116a0fbb01e, type: 3}
       propertyPath: musicList.Array.size
       value: 1
@@ -6313,9 +6329,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -409188099
-  m_SortingLayer: 6
-  m_SortingOrder: 0
+  m_SortingLayerID: 1356638651
+  m_SortingLayer: 5
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 9afc32399e0531e4abfccbc22a0458cc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
@@ -9809,8 +9825,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -409188099
-  m_SortingLayer: 6
+  m_SortingLayerID: 1356638651
+  m_SortingLayer: 5
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 9afc32399e0531e4abfccbc22a0458cc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -10098,6 +10114,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1515913963529781962, guid: e81daa40c25a65747b25b1a9a5e883ea, type: 3}
       propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1515913963529781962, guid: e81daa40c25a65747b25b1a9a5e883ea, type: 3}
+      propertyPath: m_SortingOrder
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3250538884503776846, guid: e81daa40c25a65747b25b1a9a5e883ea, type: 3}

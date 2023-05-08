@@ -11,7 +11,13 @@ public class AudioManager : MonoBehaviour
 	#region Attributes
 	[SerializeField] List<AudioClip> musicList;
 	[SerializeField] List<AudioClip> levelAmbience;
-	private AudioSource audioSource;
+	[SerializeField] float musicVolume = 0.5f;
+	[SerializeField] float ambienceVolume = 0.35f;
+	[SerializeField] float sfxVolume = 0.25f;
+
+	private AudioSource ambientAudioSource;
+	private AudioSource musicAudioSource;
+	private AudioSource SFXAudioSource;
 	#endregion
 
 	#region Methods
@@ -23,28 +29,28 @@ public class AudioManager : MonoBehaviour
 		}
 		else
 		{
-			audioSource.PlayOneShot(sound);
+			musicAudioSource.PlayOneShot(sound);
 		}
 	}
 	public void PlayFX(AudioClip sound)
 	{
 		Debug.Log("Play SFX");
-		audioSource.PlayOneShot(sound);
+		SFXAudioSource.PlayOneShot(sound);
 	}
 	public void StopAudio()
 	{
-		audioSource.Stop();
+		ambientAudioSource.Stop();
 		this.StopAllCoroutines();
 	}
 	IEnumerator MusicLoop(AudioClip clip)
 	{
-		audioSource.PlayOneShot(clip);
+		musicAudioSource.PlayOneShot(clip);
 		yield return new WaitForSeconds(clip.length);
 		StartCoroutine(MusicLoop(clip));
 	}
 	IEnumerator AmbienceLoop(AudioClip clip)
 	{
-		audioSource.PlayOneShot(clip);
+		ambientAudioSource.PlayOneShot(clip);
 		yield return new WaitForSeconds(clip.length);
 		StartCoroutine(MusicLoop(clip));
 	}
@@ -54,7 +60,15 @@ public class AudioManager : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
     {
-		audioSource = this.GetComponent<AudioSource>();
+		ambientAudioSource = GameObject.Find("AmbientAudioSource").GetComponent<AudioSource>();
+		musicAudioSource = GameObject.Find("MusicAudioSource").GetComponent<AudioSource>();
+		SFXAudioSource = GameObject.Find("SFXAudioSource").GetComponent<AudioSource>();
+
+		//Set Volume
+		ambientAudioSource.volume = ambienceVolume;
+		musicAudioSource.volume = musicVolume;
+		SFXAudioSource.volume = sfxVolume;
+
 		PlayMusic(musicList[Random.Range(0, musicList.Count)], true);
 		StartCoroutine(AmbienceLoop(levelAmbience[Random.Range(0, levelAmbience.Count)]));
     }

@@ -70,6 +70,7 @@ public class PlayerController : MonoBehaviour
 		}
 		else
 		{
+			//Need to rethink this logic
 			if (jump < jumpCount)
 			{
 				isJumping = true;
@@ -83,7 +84,7 @@ public class PlayerController : MonoBehaviour
 		yield return new WaitForSeconds(movementDelay);
 		rb2d.AddForce(Vector2.up * jumpHeight, ForceMode2D.Impulse);
 		
-		yield return new WaitForSeconds(0.15f);
+		yield return new WaitUntil(() => IsGrounded() == false);
 		animator.SetBool("isFalling", true);
 
 		yield return new WaitUntil(() => IsGrounded() == true);
