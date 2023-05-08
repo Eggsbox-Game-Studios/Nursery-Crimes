@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
 			if (jump < jumpCount)
 			{
 				isJumping = true;
-				rb2d.AddForce(Vector2.up * (jumpHeight + jumpBoost), ForceMode2D.Impulse);
+				rb2d.AddForce(Vector2.up * ((jumpHeight/2) + jumpBoost), ForceMode2D.Impulse);
 				jump++;
 			}
 		}

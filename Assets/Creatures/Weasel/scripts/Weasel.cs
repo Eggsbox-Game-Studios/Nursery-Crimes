@@ -87,6 +87,7 @@ public class Weasel : MonoBehaviour
 	{
         if (collision.gameObject.tag == "EnemyStop")
         {
+            //Kill Movement
             Debug.Log("Enemy Stop");
             enemyStop = true;
         }
