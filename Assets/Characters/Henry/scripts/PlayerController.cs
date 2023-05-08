@@ -37,9 +37,7 @@ public class PlayerController : MonoBehaviour
 	private Vector3 jumpVector = new Vector2();
 	float defaultDrag;
 
-	//Camera Control Variables
-	private bool isZoomed = false;
-	private float defaultZoom = 5f;
+
 	#endregion
 
 	//	Code for player movement methods.
@@ -156,11 +154,6 @@ public class PlayerController : MonoBehaviour
 			isJumping = false;
 			rb2d.drag = defaultDrag;
 		}
-		//Reset Camera if not default zoom
-		if (isZoomed == false)
-		{
-			//gameManager.LevelCamera.SetZoom(Mathf.Lerp(Camera.main.orthographicSize, defaultZoom, 0.5f * Time.deltaTime));
-		}
 	}
 	#endregion
 
@@ -206,15 +199,6 @@ public class PlayerController : MonoBehaviour
 		{
 			gameManager.uiManager.uiKit.uiClues.FindClue(1);
 			Destroy(other.gameObject);
-		}
-	}
-
-
-	private void OnTriggerExit2D(Collider2D collision)
-	{
-		if (collision.gameObject.tag == "Zoom")
-		{
-			isZoomed = false;
 		}
 	}
 	#endregion

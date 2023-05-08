@@ -9,7 +9,9 @@ public class Weasel : MonoBehaviour
     //Editor Variables
     [SerializeField] float detectionRadius = 10f;
     [SerializeField] public float moveSpeed = 2f;
+    [SerializeField] AudioClip detectionSound;
 
+    GameManager gm;
     //Components
     CircleCollider2D detectionCircle;
     Rigidbody2D rb2d;
@@ -21,6 +23,7 @@ public class Weasel : MonoBehaviour
 
     //Detection Control
     private bool playerDetected = false;
+    private bool enemyStop = false;
 
 	#endregion
 
@@ -60,6 +63,8 @@ public class Weasel : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
     {
+        gm = GameObject.FindObjectOfType<GameManager>().GetComponent<GameManager>();
+
         //Get Components
         rb2d = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -77,9 +82,24 @@ public class Weasel : MonoBehaviour
             HandleAnimation(direction);
         }
     }
+
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+        if (collision.gameObject.tag == "EnemyStop")
+        {
+            Debug.Log("Enemy Stop");
+            enemyStop = true;
+        }
+
+        if (collision.gameObject.tag == "Player")
+        {
+            gm.audioManager.PlayFX(detectionSound);
+        }
+
+    }
 	private void OnTriggerStay2D(Collider2D collision)
 	{
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player" && enemyStop == false)
         {
             playerDetected = true;
             destination = collision.gameObject.transform.position;

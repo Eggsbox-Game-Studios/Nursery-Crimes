@@ -9,7 +9,8 @@ public class AudioManager : MonoBehaviour
 	#endregion
 
 	#region Attributes
-	[SerializeField] public List<AudioClip> musicList;
+	[SerializeField] List<AudioClip> musicList;
+	[SerializeField] List<AudioClip> levelAmbience;
 	private AudioSource audioSource;
 	#endregion
 
@@ -41,6 +42,12 @@ public class AudioManager : MonoBehaviour
 		yield return new WaitForSeconds(clip.length);
 		StartCoroutine(MusicLoop(clip));
 	}
+	IEnumerator AmbienceLoop(AudioClip clip)
+	{
+		audioSource.PlayOneShot(clip);
+		yield return new WaitForSeconds(clip.length);
+		StartCoroutine(MusicLoop(clip));
+	}
 	#endregion
 	#region Unity
 
@@ -49,6 +56,7 @@ public class AudioManager : MonoBehaviour
     {
 		audioSource = this.GetComponent<AudioSource>();
 		PlayMusic(musicList[Random.Range(0, musicList.Count)], true);
+		StartCoroutine(AmbienceLoop(levelAmbience[Random.Range(0, levelAmbience.Count)]));
     }
 
 	#endregion

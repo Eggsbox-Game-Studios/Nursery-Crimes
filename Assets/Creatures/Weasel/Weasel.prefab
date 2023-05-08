@@ -927,6 +927,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   detectionRadius: 15
   moveSpeed: 2
+  detectionSound: {fileID: 8300000, guid: 1e0b27611c0520549bbd2dfb3f3d67ee, type: 3}
 --- !u!114 &-6159325813281479600
 MonoBehaviour:
   m_ObjectHideFlags: 0

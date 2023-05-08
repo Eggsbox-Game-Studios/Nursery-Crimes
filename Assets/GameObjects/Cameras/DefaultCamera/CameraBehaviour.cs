@@ -36,11 +36,10 @@ public class CameraBehaviour : MonoBehaviour
 	}
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
 		Vector3 newPosition = new Vector3(target.position.x, target.position.y + offsetY, -10f);
 		transform.position = Vector3.Slerp(transform.position, newPosition, followSpeed * Time.deltaTime);
-		cam.orthographicSize = zoom;
     }
 	#endregion
 }

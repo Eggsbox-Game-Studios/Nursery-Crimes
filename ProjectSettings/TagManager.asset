@@ -13,6 +13,7 @@ TagManager:
   - Clue
   - Crate
   - UIManager
+  - EnemyStop
   layers:
   - Default
   - TransparentFX
