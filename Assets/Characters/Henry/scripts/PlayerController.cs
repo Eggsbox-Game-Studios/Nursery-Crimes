@@ -154,6 +154,13 @@ public class PlayerController : MonoBehaviour
 	void HandleEvents()
 	{
 		//Fires when player is on a ground layer.
+		if (isJumping)
+		{
+			if (IsGrounded() == true)
+			{
+				PlayParticles(dustParticles);
+			}
+		}
 		if (IsGrounded() == true)
 		{
 			
