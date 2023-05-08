@@ -13,6 +13,7 @@ public class CameraBehaviour : MonoBehaviour
 	[SerializeField] private float followSpeed = 5f;
 	[SerializeField] float zoom = 3;
 	[SerializeField] float offsetY = 2.5f;
+	public float defaultZoom;
 	Camera cam;
 
 	#endregion
@@ -31,6 +32,7 @@ public class CameraBehaviour : MonoBehaviour
     {
         cam = this.GetComponent<Camera>();
 		cam.orthographicSize = zoom;
+		defaultZoom = cam.orthographicSize;
 	}
 
     // Update is called once per frame

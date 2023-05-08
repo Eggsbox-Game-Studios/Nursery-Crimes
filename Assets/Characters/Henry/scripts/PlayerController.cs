@@ -142,25 +142,6 @@ public class PlayerController : MonoBehaviour
 
 	#endregion
 
-	//Region for Camera Controlss
-	#region CameraControl
-
-	void CameraZoom(GameObject gobject)
-	{
-		CameraZoomBehaviour cameraZoomBehaviour = gobject.GetComponent<CameraZoomBehaviour>();
-		if (Camera.main.orthographicSize >= cameraZoomBehaviour.zoomAmount)
-		{
-			isZoomed = true;
-
-		}
-		if (Camera.main.orthographicSize != cameraZoomBehaviour.zoomAmount)
-		{
-			gameManager.LevelCamera.SetZoom(Mathf.Lerp(Camera.main.orthographicSize, cameraZoomBehaviour.zoomAmount, cameraZoomBehaviour.duration * Time.deltaTime));
-
-		}
-	}
-	#endregion
-
 	#region Events
 
 	/// <summary>
@@ -178,7 +159,7 @@ public class PlayerController : MonoBehaviour
 		//Reset Camera if not default zoom
 		if (isZoomed == false)
 		{
-			gameManager.LevelCamera.SetZoom(Mathf.Lerp(Camera.main.orthographicSize, defaultZoom, 0.5f * Time.deltaTime));
+			//gameManager.LevelCamera.SetZoom(Mathf.Lerp(Camera.main.orthographicSize, defaultZoom, 0.5f * Time.deltaTime));
 		}
 	}
 	#endregion
@@ -227,13 +208,7 @@ public class PlayerController : MonoBehaviour
 			Destroy(other.gameObject);
 		}
 	}
-	private void OnTriggerStay2D(Collider2D other)
-	{
-		if (other.gameObject.tag == "Zoom" && isZoomed == false)
-		{
-			CameraZoom(other.gameObject);
-		}
-	}
+
 
 	private void OnTriggerExit2D(Collider2D collision)
 	{

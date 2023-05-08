@@ -235,7 +235,7 @@ GameObject:
   - component: {fileID: 7235849403083915299}
   - component: {fileID: 877601744063475699}
   m_Layer: 0
-  m_Name: Text (Legacy)
+  m_Name: ClueText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

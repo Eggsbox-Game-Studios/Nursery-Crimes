@@ -12,6 +12,7 @@ TagManager:
   - CluesUI
   - Clue
   - Crate
+  - UIManager
   layers:
   - Default
   - TransparentFX
