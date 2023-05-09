@@ -89,13 +89,16 @@ public class PlayerController : MonoBehaviour
 		PlayParticles(dustParticles);
 		rb2d.AddForce(Vector2.up * jumpHeight, ForceMode2D.Impulse);
 		animator.SetFloat("JumpStage", Time.deltaTime * 0.5f);
-		yield return new WaitUntil(() => IsGrounded() == false);
+
+		//yield return new WaitUntil(() => IsGrounded() == false);
+		yield return new WaitForSeconds(Time.deltaTime * movementDelay * 0.5f);
 		animator.SetBool("isFalling", true);
+		animator.SetBool("isJumping", false);
 
 		yield return new WaitUntil(() => IsGrounded() == true);
 		//Jank
 		animator.SetBool("isFalling", false);
-		animator.SetBool("isJumping", false);
+		
 	}
 
 	void Glide()
