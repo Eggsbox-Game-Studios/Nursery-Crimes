@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
 		animator.SetBool("isJumping", false);
 
 		yield return new WaitUntil(() => IsGrounded() == true);
-		//Jank
+
 		animator.SetBool("isFalling", false);
 		animator.SetBool("isGrounded", true);
 
