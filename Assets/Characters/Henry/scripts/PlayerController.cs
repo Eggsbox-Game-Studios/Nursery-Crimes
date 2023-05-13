@@ -78,7 +78,10 @@ public class PlayerController : MonoBehaviour
 			if (jump < jumpCount)
 			{
 				isJumping = true;
-				rb2d.AddForce(Vector2.up * ((jumpHeight/2) + jumpBoost), ForceMode2D.Impulse);
+				//rb2d.velocity = new Vector2(0, Vector2.up.y * (jumpBoost) * 1.2f);
+				
+				rb2d.AddForce(Vector2.up * ((jumpHeight) + jumpBoost)*0.5f, ForceMode2D.Impulse);
+				rb2d.AddForce(Physics2D.gravity);
 				jump++;
 			}
 		}
@@ -87,18 +90,20 @@ public class PlayerController : MonoBehaviour
 	{
 		yield return new WaitForSeconds(movementDelay);
 		PlayParticles(dustParticles);
-		rb2d.AddForce(Vector2.up * jumpHeight, ForceMode2D.Impulse);
-		animator.SetFloat("JumpStage", Time.deltaTime * 0.5f);
+		rb2d.velocity = new Vector2(0, Vector2.up.y * (jumpHeight + jumpBoost) * 1.2f);
+		animator.SetBool("isGrounded", false);
 
-		//yield return new WaitUntil(() => IsGrounded() == false);
-		yield return new WaitForSeconds(Time.deltaTime * movementDelay * 0.5f);
+		yield return new WaitForSeconds(Time.deltaTime * movementDelay * 0.25f);
+		//rb2d.AddForce(Physics2D.gravity);
 		animator.SetBool("isFalling", true);
 		animator.SetBool("isJumping", false);
 
 		yield return new WaitUntil(() => IsGrounded() == true);
 		//Jank
 		animator.SetBool("isFalling", false);
-		
+		animator.SetBool("isGrounded", true);
+
+
 	}
 
 	void Glide()
