@@ -38,7 +38,7 @@ public class CameraBehaviour : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-		Vector3 newPosition = new Vector3(target.position.x, (Mathf.Lerp(transform.position.y, target.position.y - offsetY, (0.5f * 0.5f))), -10f);
+		Vector3 newPosition = new Vector3(target.position.x, (Mathf.Lerp(transform.position.y, target.position.y - offsetY, (Time.deltaTime * 10))), -10f);
 		transform.position = Vector3.Slerp(transform.position, newPosition, followSpeed * Time.deltaTime);
     }
 	#endregion
